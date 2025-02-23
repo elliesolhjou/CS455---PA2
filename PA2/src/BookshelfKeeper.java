@@ -35,7 +35,7 @@ public class BookshelfKeeper {
 
       bookshelf = new Bookshelf();
       totalMoves = 0;
-
+      assert isValidBookshelfKeeper() : "Bookshelf should be valid";
    }
 
    /**
@@ -49,6 +49,7 @@ public class BookshelfKeeper {
       assert sortedBookshelf.isSorted() : "Bookshelf is not sorted";
       bookshelf = sortedBookshelf;
       totalMoves = 0;
+      assert isValidBookshelfKeeper() : "Bookshelf is not valid";
    }
 
    /**
@@ -93,6 +94,7 @@ public class BookshelfKeeper {
             callToMutator++;
          }
       }
+      assert isValidBookshelfKeeper(): "Bookshelf is not valid";
       return callToMutator++;
    }
 
@@ -133,8 +135,9 @@ public class BookshelfKeeper {
          }
          bookshelf.addLast(height);
       }
+      assert isValidBookshelfKeeper(): "Bookshelf is not valid";
       return callToMutator++;
-      //assert isValidBookshelfKeeper();
+
    }
 
    /**
@@ -143,8 +146,8 @@ public class BookshelfKeeper {
     * that have been requested up to now.
     */
    public int getTotalOperations() {
-
-      return totalMoves;   // dummy code to get stub to compile
+      assert isValidBookshelfKeeper() : "Bookshelf is not valid";
+      return totalMoves;
    }
 
    /**
@@ -152,6 +155,7 @@ public class BookshelfKeeper {
     */
    public int getNumBooks() {
 
+      assert isValidBookshelfKeeper() : "Bookshelf is not valid";
       return bookshelf.size();
    }
 
@@ -165,7 +169,7 @@ public class BookshelfKeeper {
     *
     */
    public String toString() {
-
+      assert isValidBookshelfKeeper() : "Bookshelf is not valid";
       return (bookshelf.toString());   // dummy code to get stub to compile
 
    }
@@ -176,11 +180,11 @@ public class BookshelfKeeper {
     */
    private boolean isValidBookshelfKeeper() {
       for (int i = 0; i< bookshelf.size()-1; i++) {
-         if (bookshelf.getBooks().get(i) <= 0) {return false;}
-         if (bookshelf.getBooks().get(i) > bookshelf.getBooks().get(i+1)) {return false;}
+         if (bookshelf.getBooks().get(i) <= 0 || bookshelf.getBooks().get(i) > bookshelf.getBooks().get(i + 1)) {
+            return false;
+         }
       }
       return true;
-
    }
 
    // add any other private methods here
