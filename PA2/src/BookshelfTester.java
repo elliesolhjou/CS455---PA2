@@ -33,7 +33,7 @@ public class BookshelfTester{
       pileOfBook.add(2);
       
       Bookshelf bookshelf2 = new Bookshelf(pileOfBook);
-      
+
       System.out.printf("Books on bookshelf2 [exp: [17, 3, 6, 8, 5, 2 ]]: %s%n", bookshelf2.getBooks());
       
       System.out.printf("String format of bookshelf2 [Exp: [17, 3, 6, 8, 5, 2 ]]: %s%n%n", bookshelf2.toString());

@@ -4,6 +4,8 @@
 // Spring 2025
 
 
+import java.util.ArrayList;
+
 /**
  * Class BookshelfKeeper
  *
@@ -21,13 +23,18 @@ public class BookshelfKeeper {
 
     */
 
-   // <add instance variables here>
+   private Bookshelf bookshelf;
+   private int totalMoves;
+   public static final int SIZE_INDICATOR_HELPER = 2;
 
 
    /**
     * Creates a BookShelfKeeper object with an empty bookshelf
     */
    public BookshelfKeeper() {
+
+      bookshelf = new Bookshelf();
+      totalMoves = 0;
 
    }
 
@@ -38,7 +45,10 @@ public class BookshelfKeeper {
     * PRE: sortedBookshelf.isSorted() is true.
     */
    public BookshelfKeeper(Bookshelf sortedBookshelf) {
-
+      assert sortedBookshelf != null : "Bookshelf is null";
+      assert sortedBookshelf.isSorted() : "Bookshelf is not sorted";
+      bookshelf = sortedBookshelf;
+      totalMoves = 0;
    }
 
    /**
@@ -51,8 +61,39 @@ public class BookshelfKeeper {
     * PRE: 0 <= position < getNumBooks()
     */
    public int pickPos(int position) {
-
-      return 0;   // dummy code to get stub to compile
+      assert position >= 0 && position < bookshelf.size() : "Position is out of bounds";
+      int callToMutator = 0;
+      ArrayList<Integer> tempBookHolder = new ArrayList<Integer>();
+      int pickedBookedHeight = bookshelf.getBooks().get(position);
+      if (position < middlePosition()){
+         for (int i =0; i< position; i++ ){
+            int removedBook = (bookshelf.removeFront());
+            tempBookHolder.add(removedBook);
+            totalMoves++;
+            callToMutator++;
+         }
+         bookshelf.removeFront();
+         for (int i =tempBookHolder.size()-1; i >= 0 ; i-- ){
+            bookshelf.addFront(tempBookHolder.get(i));
+            totalMoves++;
+            callToMutator++;
+         }
+      }
+      else {
+         for (int i =bookshelf.size()-1; i > position ; i-- ){
+            int removedBook = bookshelf.removeLast();
+            tempBookHolder.add(removedBook);
+            totalMoves++;
+            callToMutator++;
+         }
+         bookshelf.removeLast();
+         for (int i = tempBookHolder.size()-1; i >= 0 ; i-- ){
+            bookshelf.addLast(tempBookHolder.get(i));
+            totalMoves++;
+            callToMutator++;
+         }
+      }
+      return callToMutator++;
    }
 
    /**
@@ -65,8 +106,35 @@ public class BookshelfKeeper {
     * PRE: height > 0
     */
    public int putHeight(int height) {
-
-      return 0;   // dummy code to get stub to compile
+      assert height > 0 : "Height must be greater than 0";
+      ArrayList<Integer> tempBookHolder = new ArrayList<Integer>();
+      int callToMutator = 0;
+      int heightIndex = heightLocator(height);
+      if (heightIndex < middlePosition()){
+         for (int i =0; i< heightIndex; i++ ){
+            int removedBook = (bookshelf.removeFront());
+            tempBookHolder.add(removedBook);
+            totalMoves++;
+            callToMutator++;
+         }
+         bookshelf.addFront(height);
+         for (int i =tempBookHolder.size()-1; i >= 0 ; i-- ){
+            bookshelf.addLast(tempBookHolder.get(i));
+            totalMoves++;
+            callToMutator++;
+         }
+      }
+      else {
+         for (int i = bookshelf.size()-1; i > heightIndex ; i-- ){
+            int removedBook = bookshelf.removeLast();
+            tempBookHolder.add(removedBook);
+            totalMoves++;
+            callToMutator++;
+         }
+         bookshelf.addLast(height);
+      }
+      return callToMutator++;
+      //assert isValidBookshelfKeeper();
    }
 
    /**
@@ -76,7 +144,7 @@ public class BookshelfKeeper {
     */
    public int getTotalOperations() {
 
-      return 0;   // dummy code to get stub to compile
+      return totalMoves;   // dummy code to get stub to compile
    }
 
    /**
@@ -84,7 +152,7 @@ public class BookshelfKeeper {
     */
    public int getNumBooks() {
 
-      return 0;   // dummy code to get stub to compile
+      return bookshelf.size();
    }
 
    /**
@@ -98,7 +166,7 @@ public class BookshelfKeeper {
     */
    public String toString() {
 
-      return "";   // dummy code to get stub to compile
+      return (bookshelf.toString());   // dummy code to get stub to compile
 
    }
 
@@ -107,12 +175,114 @@ public class BookshelfKeeper {
     * (See representation invariant comment for details.)
     */
    private boolean isValidBookshelfKeeper() {
-
-      return false;  // dummy code to get stub to compile
+      for (int i = 0; i< bookshelf.size()-1; i++) {
+         if (bookshelf.getBooks().get(i) <= 0) {return false;}
+         if (bookshelf.getBooks().get(i) > bookshelf.getBooks().get(i+1)) {return false;}
+      }
+      return true;
 
    }
 
    // add any other private methods here
+   private boolean isOddSize(){
+      return (bookshelf.getBooks().size() % 2 != 0);
+   }
+   private double averageHeight(){
+      ArrayList<Integer> currentBookList = bookshelf.getBooks();
+      double averageHeight = 0.0;
+      if (isOddSize()) {
+         averageHeight = (double) currentBookList.get(middlePosition());
+      }
+      else {
+         int middleIndexLow = middlePosition() - 1;
+         int middleIndexHigh = middlePosition();
+         averageHeight = ((double) (currentBookList.get(middleIndexLow) + currentBookList.get(middleIndexHigh))) / 2;
+      }
+      return averageHeight;
+   }
+   private int middlePosition() {
+      return bookshelf.size() / 2;
+   }
 
+   private int heightLocator(int height) {
+      int heightIndex = -1;
+      if (height >= averageHeight()) {
+         for (int i = bookshelf.size()-1; i > middlePosition(); i--) {
+            if (bookshelf.getBooks().get(i) >= height && bookshelf.getBooks().get(i-1) < height) {
+               heightIndex = i;
+            }
+         }
+      }
+      else {
+         for (int i = 0; i < middlePosition(); i++) {
+            if (bookshelf.getBooks().get(i) <= height && bookshelf.getBooks().get(i+1) > height) {
+               heightIndex = i;
+            }
+         }
+      }
+      return heightIndex;
+   }
+//   private int pickPosOddSizeShelf(int position){
+//      ArrayList<Integer> tempBookHolder = new ArrayList<Integer>();
+//      int pickedBookedHeight = bookshelf.getBooks().get(position);
+//      if (position < middlePosition()){
+//         for (int i =0; i< position; i++ ){
+//            int removedBook = (bookshelf.removeFront());
+//            tempBookHolder.add(removedBook);
+//            totalMoves++;
+//         }
+//         bookshelf.removeFront();
+//         for (int i =tempBookHolder.size()-1; i >= 0 ; i-- ){
+//            bookshelf.addFront(tempBookHolder.get(i));
+//            totalMoves++;
+//         }
+//      }
+//      else {
+//         for (int i =bookshelf.size()-1; i > position ; i-- ){
+//            int removedBook = bookshelf.removeLast();
+//            tempBookHolder.add(removedBook);
+//            totalMoves++;
+//         }
+//         bookshelf.removeLast();
+//         for (int i = tempBookHolder.size()-1; i >= 0 ; i-- ){
+//            bookshelf.addLast(tempBookHolder.get(i));
+//            totalMoves++;
+//         }
+//      }
+//      return pickedBookedHeight;
+//   }
+
+
+
+
+
+
+
+
+   public static void main(String[] args) {
+      ArrayList<Integer> pileOfBook = new ArrayList<Integer> ();
+      pileOfBook.add(1);
+      pileOfBook.add(3);
+      pileOfBook.add(5);
+      pileOfBook.add(8);
+      pileOfBook.add(15);
+      pileOfBook.add(22);
+//      pileOfBook.add(2);
+//      pileOfBook.add(2);
+
+      Bookshelf bookshelf2 = new Bookshelf(pileOfBook);
+      System.out.println(bookshelf2.size());
+      BookshelfKeeper bookshelfKeeper = new BookshelfKeeper(bookshelf2);
+      System.out.println(bookshelfKeeper.isOddSize());
+      System.out.println(bookshelfKeeper.middlePosition());
+      System.out.println(bookshelfKeeper.averageHeight());
+      System.out.println(bookshelfKeeper.pickPos(4));
+      System.out.println(bookshelfKeeper.toString());
+      System.out.println(bookshelfKeeper.getTotalOperations());
+      System.out.println(bookshelfKeeper.heightLocator(20));
+      System.out.println(bookshelfKeeper.putHeight(20));
+      System.out.println(bookshelfKeeper.toString());
+
+   }
 
 }

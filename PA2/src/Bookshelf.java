@@ -204,12 +204,10 @@ public class Bookshelf {
    private boolean isValidBookshelf(){
       
       
-      for (int bookOnShelf: shelf){
-         
-         if (bookOnShelf <= 0) { return false;}
+      for (int bookOnShelf: shelf) {
 
+         return !(bookOnShelf <= 0);
       }
-      
       return true;
 
    }
