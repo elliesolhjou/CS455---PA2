@@ -1,9 +1,9 @@
-// Name: 
-// USC NetID: 
+// Name: Ellie Solhjou
+// USC NetID: 1424729265
 // CSCI455 PA2
 // Spring 2025
 
-
+import java.util.ArrayList;
 /**
  * Class BookshelfKeeper 
  *
@@ -21,13 +21,16 @@ public class BookshelfKeeper {
 
    */
    
-   // <add instance variables here>
+   private int bookshelfSize;
+   private int callToMutator;
+   private ArrayList<Integer> bookArray;
 
 
    /**
     * Creates a BookShelfKeeper object with an empty bookshelf
     */
    public BookshelfKeeper() {
+      bookArray = new ArrayList<Integer>();
 
    }
 
@@ -38,7 +41,8 @@ public class BookshelfKeeper {
     * PRE: sortedBookshelf.isSorted() is true.
     */
    public BookshelfKeeper(Bookshelf sortedBookshelf) {
-
+      bookshelfSize = sortedBookshelf.size();
+      bookArray = sortedBookshelf.getBooks();
    }
 
    /**
@@ -51,8 +55,18 @@ public class BookshelfKeeper {
     * PRE: 0 <= position < getNumBooks()
     */
    public int pickPos(int position) {
+  
+      callToMutator = 0;
+      for (int i = position; i< bookshelfSize -1 ; i++){
+          
+         bookArray.set(i, bookArray.get(i+1));
+         callToMutator++;
 
-      return 0;   // dummy code to get stub to compile
+      }
+
+      bookshelfSize--; 
+         
+      return callToMutator;
    }
 
    /**
