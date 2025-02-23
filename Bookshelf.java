@@ -1,8 +1,10 @@
-// Name: 
-// USC NetID: 
+// Name: Ellie Solhjou
+// USC NetID: 1424729265
 // CSCI455 PA2
 // Spring 2025
 
+
+import java.util.ArrayList;
 
 /**
  * Class Bookshelf
@@ -19,11 +21,17 @@ public class Bookshelf {
    /**
       Representation invariant:
 
-      <put rep. invar. comment here>
+      * all books in shelf must have a positive height ( > 0)
+      * shelf.size() always must be >= 0
+      * non null values (no gap) should exist on shelf (in shelf array)
+      
 
    */
    
-   // <add instance variables here>
+   private ArrayList<Integer> shelf;
+   private int book; 
+   
+  
 
 
    /**
@@ -31,7 +39,11 @@ public class Bookshelf {
     */
    public Bookshelf() {
       
+     
+      shelf = new ArrayList<Integer>();
       assert isValidBookshelf();  // sample assert statement (you will be adding more of these calls)
+      
+
    }
 
    /**
@@ -42,7 +54,12 @@ public class Bookshelf {
     * representing the height of each book.
     */
    public Bookshelf(ArrayList<Integer> pileOfBooks) {
- 
+      
+      shelf = new ArrayList<Integer> (pileOfBooks);
+      
+      assert isValidBookshelf();
+      
+
    }
 
    /**
@@ -53,6 +70,13 @@ public class Bookshelf {
     */
    public void addFront(int height) {
       
+      assert height > 0: "Height should be a positive nuymber." ;
+            
+      shelf.add(0, height);
+      
+      assert isValidBookshelf();
+      
+      
    }
 
    /**
@@ -61,6 +85,13 @@ public class Bookshelf {
     * PRE: height > 0 (height of book is always positive)
     */
    public void addLast(int height) {
+      
+      assert height > 0: "Height should be a positive nuymber.";
+      
+      shelf.add(height);
+      
+      assert isValidBookshelf();
+     
       
    }
 
@@ -72,7 +103,14 @@ public class Bookshelf {
     */
    public int removeFront() {
       
-      return 0;   // dummy code to get stub to compile
+      assert shelf.size() > 0 : "Cannot remove from an empty bookshelf.";
+      
+      book = shelf.get(0);
+      shelf.remove(0);
+
+      assert isValidBookshelf();
+
+      return book;
       
    }
 
@@ -83,7 +121,16 @@ public class Bookshelf {
     * PRE: this.size() > 0 i.e. can be called only on non-empty BookShelf
     */
    public int removeLast() {
-      return 0;   // dummy code to get stub to compile      
+      
+      assert shelf.size () > 0 : "Cannot remove from an empty bookshelf.";
+      
+      book = shelf.get(shelf.size()-1);
+      shelf.remove(shelf.size()-1);
+      
+      assert isValidBookshelf();
+      
+      return book;
+      
    }
 
    /*
@@ -93,7 +140,11 @@ public class Bookshelf {
     */
    public int getHeight(int position) {
       
-      return 0;   // dummy code to get stub to compile
+      assert 0 <= position && position < shelf.size(): "Invalid book position."; 
+      book = shelf.get(position);
+      
+      assert isValidBookshelf();
+      return book;
       
    }
 
@@ -102,8 +153,17 @@ public class Bookshelf {
     */
    public int size() {
       
-      return 0;   // dummy code to get stub to compile
+      assert isValidBookshelf();
+      return shelf.size();
 
+   }
+   
+   public ArrayList<Integer> getBooks (){
+      
+      assert isValidBookshelf();
+      
+      return new ArrayList<Integer>(shelf);
+      
    }
 
    /**
@@ -113,8 +173,10 @@ public class Bookshelf {
     */
    public String toString() {
       
-      return "";   // dummy code to get stub to compile
-
+      assert isValidBookshelf();
+      
+      return shelf.toString();
+      
    }
 
    /**
@@ -123,17 +185,39 @@ public class Bookshelf {
     */
    public boolean isSorted() {
       
-      return false;  // dummy code to get stub to compile
+      assert isValidBookshelf();
+     
+      if (shelf.size() >0){
+         for (int i=0; i< shelf.size() - 1 ; i++){
+            if (shelf.get(i) > shelf.get(i+1)){
+                return false; 
+            }
+         }
+      }
+      
+      
+      return true;
    }
 
    /**
     * Returns true iff the Bookshelf data is in a valid state.
     * (See representation invariant comment for more details.)
     */
-   private boolean isValidBookshelf() {
+   private boolean isValidBookshelf(){
       
-      return false;  // dummy code to get stub to compile
+      
+      for (int bookOnShelf: shelf){
+         
+         if (bookOnShelf <= 0) { return false;}
+
+      }
+      
+      return true;
 
    }
+   
 
-} 
+      
+      
+
+}
