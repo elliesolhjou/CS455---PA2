@@ -189,12 +189,10 @@ public class Bookshelf {
      
       if (shelf.size() >0){
          for (int i=0; i< shelf.size() - 1 ; i++){
-            if (shelf.get(i) > shelf.get(i+1)){
-                return false; 
-            }
+            return !(shelf.get(i) > shelf.get(i+1));
          }
       }
-      
+
       
       return true;
    }
