@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 /**
  * Class BookshelfKeeper
- *
  * Enables users to perform efficient putPos or pickHeight operations on a bookshelf of books
  * kept in non-decreasing order by height. Single books can only be added or removed from one
  * of the two ends of the bookshelf. Pick or put operations are performed using the minimum
@@ -23,7 +22,7 @@ public class BookshelfKeeper {
 
    private Bookshelf bookshelf;
    private int totalMoves;
-   public static final int SIZE_INDICATOR_HELPER = 2;
+   //public static final int SIZE_INDICATOR_HELPER = 2;
 
    /**
     * Creates a BookShelfKeeper object with an empty bookshelf
@@ -40,7 +39,6 @@ public class BookshelfKeeper {
     * PRE: sortedBookshelf.isSorted() is true.
     */
    public BookshelfKeeper(Bookshelf sortedBookshelf) {
-      assert sortedBookshelf != null : "Bookshelf is null";
       assert sortedBookshelf.isSorted() : "Bookshelf is not sorted";
       bookshelf = sortedBookshelf;
       totalMoves = 0;
@@ -51,12 +49,13 @@ public class BookshelfKeeper {
     * Removes a book from the specified position in the bookshelf and keeps the bookshelf sorted.
     * Returns the number of calls to mutators on the contained bookshelf used to complete this
     * operation. This must be the minimum number to complete the operation.
+    * @param position indicates which book at index "position" is requested to be removed
     * PRE: 0 <= position < getNumBooks()
     */
    public int pickPos(int position) {
       assert position >= 0 && position < bookshelf.size() : "Position is out of bounds";
       int callToMutator = 0;
-      ArrayList<Integer> tempBookHolder = new ArrayList<Integer>();
+      ArrayList<Integer> tempBookHolder = new ArrayList<Integer>();//temp storage for removing books from either ends
 
       if (position < middlePosition()) {
          for (int i = 0; i < position; i++) {
@@ -76,8 +75,7 @@ public class BookshelfKeeper {
          }
       } else {
          for (int i = bookshelf.size() - 1; i > position; i--) {
-            int removedBook = bookshelf.removeLast();
-            tempBookHolder.add(removedBook);
+            tempBookHolder.add(bookshelf.removeLast());
             totalMoves++;
             callToMutator++;
          }
@@ -100,20 +98,20 @@ public class BookshelfKeeper {
     * Keeps the contained bookshelf sorted after the insertion.
     * Returns the number of calls to mutators on the contained bookshelf used to complete this
     * operation. This must be the minimum number to complete the operation.
+    * @param height shows new book's height we want to add to shelf
     * PRE: height > 0
     */
    public int putHeight(int height) {
       assert height > 0 : "Height must be greater than 0";
-      ArrayList<Integer> tempBookHolder = new ArrayList<Integer>();
+      ArrayList<Integer> tempBookHolder = new ArrayList<Integer>(); //temp storage for removing books from either ends
       int callToMutator = 0;
       int heightIndex = heightLocator(height);
       int n = bookshelf.size();
 
-      // Determining if removing heightIndex books is fewer (or equal) than removing (n - heightIndex) books.
+      // Determining if removing heightIndex books is less (or equal) than removing (n - heightIndex) books.
       if (heightIndex <= n - heightIndex) {
          for (int i = 0; i < heightIndex; i++) {
-            int removedBook = bookshelf.removeFront();
-            tempBookHolder.add(removedBook);
+            tempBookHolder.add(bookshelf.removeFront());
             totalMoves++;
             callToMutator++;
          }
@@ -132,8 +130,7 @@ public class BookshelfKeeper {
          // Remove (n - heightIndex) books from the back.
          int booksToRemove = n - heightIndex;
          for (int i = 0; i < booksToRemove; i++) {
-            int removedBook = bookshelf.removeLast();
-            tempBookHolder.add(removedBook);
+            tempBookHolder.add(bookshelf.removeLast());
             totalMoves++;
             callToMutator++;
          }
@@ -141,6 +138,7 @@ public class BookshelfKeeper {
          bookshelf.addLast(height);
          totalMoves++;
          callToMutator++;
+
          // Adding back the end books which were removed earlier
          for (int i = tempBookHolder.size() - 1; i >= 0; i--) {
             bookshelf.addLast(tempBookHolder.get(i));
@@ -169,14 +167,13 @@ public class BookshelfKeeper {
       return bookshelf.size();
    }
 
-   /**
-    * Returns string representation of this BookshelfKeeper.
-    * The string contains the heights of all books present on the bookshelf in order,
-    * followed by the number of bookshelf mutator calls made in the last operation,
-    * and the total number of such calls made since creation.
-    * Example: “[1, 3, 5, 7, 33] 4 10”
-    * (Note: In this implementation, the last op count is not stored separately.
-    * The UI can append the last op count to the bookshelf’s toString() if needed.)
+
+    /**
+    * Returns string representation of this BookshelfKeeper. Returns a String containing height
+    * of all books present in the bookshelf in the order they are on the bookshelf, followed
+    * by the number of bookshelf mutator calls made to perform the last pick or put operation,
+    * followed by the total number of such calls made since we created this BookshelfKeeper.
+    * Example return string showing required format: “[1, 3, 5, 7, 33] 4 10”
     */
    public String toString() {
       assert isValidBookshelfKeeper() : "Bookshelf is not valid";
@@ -207,9 +204,9 @@ public class BookshelfKeeper {
    }
 
    /**
-    * Returns the index at which a new book of the given height should be inserted so that
-    * the bookshelf remains sorted. It returns the first index where the existing book's height
-    * is greater than the new height. If no such index exists, the new book goes at the end.
+    * Returns the first index at which a new book of the given height should be inserted so that the bookshelf remains sorted.
+    * @param height is the height of book we want to insert.
+    * Iff no such index exists, the new book goes at the end.
     */
    private int heightLocator(int height) {
       ArrayList<Integer> books = bookshelf.getBooks();

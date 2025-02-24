@@ -70,7 +70,7 @@ public class Bookshelf {
     */
    public void addFront(int height) {
       
-      assert height > 0: "Height should be a positive nuymber." ;
+      assert height > 0: "Height should be a positive number." ;
             
       shelf.add(0, height);
       

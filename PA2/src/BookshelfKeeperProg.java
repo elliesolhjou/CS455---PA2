@@ -6,26 +6,25 @@ public class BookshelfKeeperProg {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
 
-        // Read and validate the initial arrangement.
-        ArrayList<Integer> initBooks = readInitialBooks(in);
-        validateInitialArrangement(initBooks);
+        // Read and confirm the initial list from user.
+        ArrayList<Integer> initBooks = readInputBooks(in);
+        assertInput(initBooks);
 
-        // Create the bookshelf and its keeper.
+        // Create the bookshelf and keeper.
         Bookshelf bookshelf = new Bookshelf(initBooks);
         BookshelfKeeper keeper = new BookshelfKeeper(bookshelf);
 
         // Print initial configuration: shelf representation, last op count (0), total operations (0)
-        printBookshelfStatus(keeper, 0);
+        printCurrentBookshelf(keeper, 0);
         System.out.println("Type pick <index> or put <height> followed by newline. Type end to exit.");
 
         // Process user commands interactively.
         runCommands(keeper, in);
 
-        in.close();
     }
 
     // Reads the initial arrangement of books from one user input line.
-    private static ArrayList<Integer> readInitialBooks(Scanner in) {
+    private static ArrayList<Integer> readInputBooks(Scanner in) {
         System.out.println("Please enter initial arrangement of books followed by newline:");
         String initialLine = in.nextLine();
         Scanner lineScanner = new Scanner(initialLine);
@@ -34,17 +33,16 @@ public class BookshelfKeeperProg {
             if (lineScanner.hasNextInt()) {
                 books.add(lineScanner.nextInt());
             } else {
-                // Skip tokens that are not integers.
+                // Skip if that are not integers.
                 lineScanner.next();
             }
         }
-        lineScanner.close();
         return books;
     }
 
     // Validating the list of book heights is non-empty (or empty is allowed),
     // all heights are positive, and the list is in non-decreasing order.
-    private static void validateInitialArrangement(ArrayList<Integer> books) {
+    private static void assertInput(ArrayList<Integer> books) {
         for (int i = 0; i < books.size(); i++) {
             if (books.get(i) <= 0) {
                 System.out.println("ERROR: Height of a book must be positive.");
@@ -61,9 +59,9 @@ public class BookshelfKeeperProg {
         }
     }
 
-    // Prints the current status of the bookshelf in the required format.
-    private static void printBookshelfStatus(BookshelfKeeper keeper, int opCount) {
-        System.out.println(keeper.toString() + " " + opCount + " " + keeper.getTotalOperations());
+    // Prints the current status of the bookshelf.
+    private static void printCurrentBookshelf(BookshelfKeeper keeper, int operationCount) {
+        System.out.println(keeper.toString() + " " + operationCount + " " + keeper.getTotalOperations());
     }
 
 
@@ -77,7 +75,6 @@ public class BookshelfKeeperProg {
             String command = lineScanner.next();
 
             if (command.equals("end")) {
-                lineScanner.close();
                 System.out.println("Exiting Program.");
                 System.exit(0);
             } else if (command.equals("pick")) {
@@ -86,15 +83,13 @@ public class BookshelfKeeperProg {
                     if (index < 0 || index >= keeper.getNumBooks()) {
                         System.out.println("ERROR: Entered pick operation is invalid on this shelf.");
                         System.out.println("Exiting Program.");
-                        lineScanner.close();
                         System.exit(0);
                     }
-                    int opCount = keeper.pickPos(index);
-                    printBookshelfStatus(keeper, opCount);
+                    int operationCount = keeper.pickPos(index);
+                    printCurrentBookshelf(keeper, operationCount);
                 } else {
                     System.out.println("ERROR: Invalid command. Valid commands are pick, put, or end.");
                     System.out.println("Exiting Program.");
-                    lineScanner.close();
                     System.exit(0);
                 }
             } else if (command.equals("put")) {
@@ -103,24 +98,20 @@ public class BookshelfKeeperProg {
                     if (height <= 0) {
                         System.out.println("ERROR: Height of a book must be positive.");
                         System.out.println("Exiting Program.");
-                        lineScanner.close();
                         System.exit(0);
                     }
-                    int opCount = keeper.putHeight(height);
-                    printBookshelfStatus(keeper, opCount);
+                    int operationCount = keeper.putHeight(height);
+                    printCurrentBookshelf(keeper, operationCount);
                 } else {
                     System.out.println("ERROR: Invalid command. Valid commands are pick, put, or end.");
                     System.out.println("Exiting Program.");
-                    lineScanner.close();
                     System.exit(0);
                 }
             } else {
                 System.out.println("ERROR: Invalid command. Valid commands are pick, put, or end.");
                 System.out.println("Exiting Program.");
-                lineScanner.close();
                 System.exit(0);
             }
-            lineScanner.close();
         }
     }
 }
