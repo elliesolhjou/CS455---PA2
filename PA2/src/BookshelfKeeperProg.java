@@ -10,15 +10,15 @@ public class BookshelfKeeperProg {
         ArrayList<Integer> initBooks = readInputBooks(in);
         assertInput(initBooks);
 
-        // Create the bookshelf and keeper.
+        // Create the bookshelf and keeper after validating input.
         Bookshelf bookshelf = new Bookshelf(initBooks);
         BookshelfKeeper keeper = new BookshelfKeeper(bookshelf);
 
-        // Print initial configuration: shelf representation, last op count (0), total operations (0)
+        // Print initial arrangement: shelf representation, last op count (0), total operations (0)
         printCurrentBookshelf(keeper, 0);
         System.out.println("Type pick <index> or put <height> followed by newline. Type end to exit.");
 
-        // Process user commands interactively.
+        // Process user commands.
         runCommands(keeper, in);
 
     }
@@ -40,8 +40,7 @@ public class BookshelfKeeperProg {
         return books;
     }
 
-    // Validating the list of book heights is non-empty (or empty is allowed),
-    // all heights are positive, and the list is in non-decreasing order.
+    // Error-checking helper function for valid arrangement and book height
     private static void assertInput(ArrayList<Integer> books) {
         for (int i = 0; i < books.size(); i++) {
             if (books.get(i) <= 0) {

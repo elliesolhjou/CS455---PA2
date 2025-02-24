@@ -4,10 +4,24 @@ import java.util.Scanner;
 public class BookshelfKeeperProg{
     public static void main (String[] args){
         Scanner in = new Scanner();
+        Bookshelf bookshelf = readInput(in);
+        validateInput(bookshelf);
 
-        // String input = int.NextLine();
-        // System.out.print(input.toString());
+        //After validation create bookshelf and bookshelfKeeper objects
+        Bookshelf initialBooks = new Bookshelf(Bookshelf);
+        BookshelfKeeper keeper = new BookshelfKeeper(initialBooks);
+
+
+        //Print initial arrangement
+        // printCurrentBookshelf(BookshelfKeeper keeper, in 0);
+
+        // run commands 
+
     }
+
+}
+private static printCurrentBookshelf(BookshelfKeeper keeper, int operationCount){
+    System.out.println(keeper.toString() + " " + operationCount + " " + keeper.getTotalOperations());
 }
 
 
@@ -29,6 +43,25 @@ private static ArrayList<Integer> readInput(Scanner in){
 
 }
 
-private static void validateInput(){}
+// Error-checking helper function for valid arrangement and book height
+private static void validateInput(Bookshelf books){
+    for (int i = 0; i < books.size(); i++){
+        if (books.get(i) <= 0) { 
+            System.out.println("Height of a book must be positive");
+            System.out.println("Exiting Program");
+            System.exit(0);
+        }
+    }
+    for (int i= 1; i< books.size(); i++){
+        if (books.get(i-1) > books.get(i)){
+            System.out.println("Heights must be specified in non-decreasing order.");
+            System.out.println("Exiting Program.");
+            System.exit(0);
+        }
+    }
+}
 
-private static void runcCommands(){}
+// Helper function for reading commands
+private static void runCommands(BookshelfKeeper keeper, string command){
+    System.out.print("yay");
+}
