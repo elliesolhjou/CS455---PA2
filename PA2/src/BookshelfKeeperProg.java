@@ -78,45 +78,51 @@ public class BookshelfKeeperProg {
                 System.out.println("Exiting Program.");
                 System.exit(0);
             } else if (command.toLowerCase().equals("pick")) {
-                if (lineScanner.hasNextInt()) { // Expects an index corresponding to a book's position on the shelf
+                if (lineScanner.hasNextInt()) {
                     int index = lineScanner.nextInt();
-                    // Check if the index is within the valid range of books on the shelf
-                    if (index < 0 || index >= keeper.getNumBooks()) {
-                        System.out.println("ERROR: Entered pick operation is invalid on this shelf.");
-                        System.out.println("Exiting Program.");
-                        System.exit(0);
-                    }
+                    validateIndex(keeper, index);
                     keeper.pickPos(index);
                     printCurrentBookshelf(keeper);
-                //Error-checking statements
                 } else {
-                    System.out.println("ERROR: Invalid command. Valid commands are pick, put, or end.");
-                    System.out.println("Exiting Program.");
-                    System.exit(0);
+                    invalidCommandIndicator();
                 }
             } else if (command.toLowerCase().equals("put")) {
-                if (lineScanner.hasNextInt()) { // Expects a positive integer representing the book's height
+                if (lineScanner.hasNextInt()) {
                     int height = lineScanner.nextInt();
-                    // Confirms that the book height is positive
-                    if (height <= 0) {
-                        System.out.println("ERROR: Height of a book must be positive.");
-                        System.out.println("Exiting Program.");
-                        System.exit(0);
-                    }
+                    validateHeight(keeper, height);
                     keeper.putHeight(height);
                     printCurrentBookshelf(keeper);
-                //Error-checking condition statements
                 } else {
-                    System.out.println("ERROR: Invalid command. Valid commands are pick, put, or end.");
-                    System.out.println("Exiting Program.");
-                    System.exit(0);
+                    invalidCommandIndicator();
                 }
-            //Error-checking condition statements
             } else {
-                System.out.println("ERROR: Invalid command. Valid commands are pick, put, or end.");
-                System.out.println("Exiting Program.");
-                System.exit(0);
+                invalidCommandIndicator();
             }
         }
+    }
+
+    // Checks if the index is within the valid range of books on the shelf
+    private static void validateIndex(BookshelfKeeper helperKeeper, int helperIndex) {
+        if (helperIndex < 0 || helperIndex >= helperKeeper.getNumBooks()) {
+            System.out.println("ERROR: Entered pick operation is invalid on this shelf.");
+            System.out.println("Exiting Program.");
+            System.exit(0);
+        }
+    }
+
+    // Confirms that the book height is positive
+    private static void validateHeight(BookshelfKeeper helperKeeper, int helperHeight) {
+        if (helperHeight <= 0) {
+            System.out.println("ERROR: Height of a book must be positive.");
+            System.out.println("Exiting Program.");
+            System.exit(0);
+        }
+    }
+
+    // Prints error messages once input command is neither "pick", "put" nor "end"
+    private static void invalidCommandIndicator(){
+        System.out.println("ERROR: Invalid command. Valid commands are pick, put, or end.");
+        System.out.println("Exiting Program.");
+        System.exit(0);
     }
 }
