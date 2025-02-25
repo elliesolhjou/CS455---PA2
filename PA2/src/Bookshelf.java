@@ -186,14 +186,13 @@ public class Bookshelf {
    public boolean isSorted() {
       
       assert isValidBookshelf();
-     
-      if (shelf.size() >0){
-         for (int i=0; i< shelf.size() - 1 ; i++){
-            return !(shelf.get(i) > shelf.get(i+1));
+
+
+      for (int i = 0; i < shelf.size() - 1; i++) {
+         if (shelf.get(i) > shelf.get(i + 1)) {
+            return false;
          }
       }
-
-      
       return true;
    }
 
@@ -202,14 +201,12 @@ public class Bookshelf {
     * (See representation invariant comment for more details.)
     */
    private boolean isValidBookshelf(){
-      
-      
       for (int bookOnShelf: shelf) {
-
-         return !(bookOnShelf <= 0);
+         if (bookOnShelf <= 0) {
+            return false;
+         }
       }
       return true;
-
    }
    
 
