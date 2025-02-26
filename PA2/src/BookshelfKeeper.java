@@ -1,9 +1,7 @@
-// Name:
-// USC NetID:
-// CSCI455 PA2
-// Spring 2025
+
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
  * Class BookshelfKeeper
@@ -32,9 +30,11 @@ public class BookshelfKeeper {
     * Creates a BookShelfKeeper object with an empty bookshelf
     */
    public BookshelfKeeper() {
+
       bookshelf = new Bookshelf();
       totalMoves = 0;
       callToMutator = 0;
+
       assert isValidBookshelfKeeper() : "Bookshelf should be valid";
    }
 
@@ -45,10 +45,13 @@ public class BookshelfKeeper {
     * PRE: sortedBookshelf.isSorted() is true.
     */
    public BookshelfKeeper(Bookshelf sortedBookshelf) {
+
       assert sortedBookshelf.isSorted() : "Bookshelf is not sorted";
+
       bookshelf = sortedBookshelf;
       totalMoves = 0;
       callToMutator = 0;
+
       assert isValidBookshelfKeeper() : "Bookshelf is not valid";
    }
 
@@ -62,7 +65,9 @@ public class BookshelfKeeper {
     * PRE: 0 <= position < getNumBooks()
     */
    public int pickPos(int position) {
+
       assert position >= 0 && position < bookshelf.size() : "Position is out of bounds";
+
       callToMutator = 0; // resetting mutator for pickPos operation
       ArrayList<Integer> tempBookHolder = new ArrayList<Integer>();//temp storage for removing books from either ends
 
@@ -98,6 +103,7 @@ public class BookshelfKeeper {
             callToMutator++;
          }
       }
+
       assert isValidBookshelfKeeper() : "Bookshelf is not valid";
       return callToMutator;
    }
@@ -112,7 +118,9 @@ public class BookshelfKeeper {
     * PRE: height > 0
     */
    public int putHeight(int height) {
+
       assert height > 0 : "Height must be greater than 0";
+
       ArrayList<Integer> tempBookHolder = new ArrayList<Integer>(); //temp storage for removing books from either ends
       callToMutator = 0; // resetting mutator for putHeight operation
       int heightIndex = heightLocator(height);
@@ -155,6 +163,7 @@ public class BookshelfKeeper {
             callToMutator++;
          }
       }
+
       assert isValidBookshelfKeeper() : "Bookshelf is not valid";
       return callToMutator;
    }
@@ -198,17 +207,14 @@ public class BookshelfKeeper {
     */
    private boolean isValidBookshelfKeeper() {
       // Check that every book is positive.
-      for (int element:bookshelf.getBooks()){
-         if (element <= 0 ){
+      for (int i = 0; i < bookshelf.size(); i++) {
+         if (bookshelf.getHeight(i) <= 0 ){
             return false;
          }
       }
       // Check that the bookshelf is in non-decreasing order.
-      for (int i = 0; i < bookshelf.size() - 1; i++) {
-         if (
-                 bookshelf.getBooks().get(i) > bookshelf.getBooks().get(i + 1)) {
-            return false;
-         }
+      if(!bookshelf.isSorted()){
+         return false;
       }
       return true;
    }
@@ -225,11 +231,14 @@ public class BookshelfKeeper {
 
    /**
     * Returns the first index at which a new book of the given height should be inserted so that the bookshelf remains sorted.
-    * @param height is the height of book we want to insert.
-    * Iff no such index exists, the new book goes at the end.
+    * @param height is the height of given book to be inserted.
+    * Iff no books is higher than the given book, the new book goes at the end.
     */
    private int heightLocator(int height) {
-      ArrayList<Integer> books = bookshelf.getBooks();
+      ArrayList<Integer> books = new ArrayList<Integer>();
+      for (int i = 0; i < bookshelf.size(); i++) {
+         books.add(bookshelf.getHeight(i));
+      }
       int n = books.size();
       for (int i = 0; i < n; i++) {
          if (books.get(i) >= height) {

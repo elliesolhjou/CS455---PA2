@@ -1,6 +1,22 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
+
+/**
+ * This program manages a "bookshelf" of books (represented by their heights) in non-decreasing order.
+ *
+ * 1. The program first prompts the user to enter an initial arrangement of books (each height must be positive
+ *    and sorted in non-decreasing order).
+ * 2. Once validated, the user can enter commands:
+ *    - "pick <index>": removes the book at the given index.
+ *    - "put <height>": inserts a new book of the given height into the shelf, maintaining sorted order.
+ *    - "end": exits the program.
+ * 3. After each valid "pick" or "put" command, the program displays the updated shelf status.
+ *
+ * Invalid input (negative or zero height, out-of-range index, or invalid command) causes an error message
+ * and terminates the program.
+ */
+
 public class BookshelfKeeperProg {
 
     public static void main(String[] args) {
@@ -84,7 +100,7 @@ public class BookshelfKeeperProg {
                     keeper.pickPos(index);
                     printCurrentBookshelf(keeper);
                 } else {
-                    invalidCommandIndicator();
+                    invalidCommandPrinter();
                 }
             } else if (command.toLowerCase().equals("put")) {
                 if (lineScanner.hasNextInt()) {
@@ -93,10 +109,10 @@ public class BookshelfKeeperProg {
                     keeper.putHeight(height);
                     printCurrentBookshelf(keeper);
                 } else {
-                    invalidCommandIndicator();
+                    invalidCommandPrinter();
                 }
             } else {
-                invalidCommandIndicator();
+                invalidCommandPrinter();
             }
         }
     }
@@ -120,7 +136,7 @@ public class BookshelfKeeperProg {
     }
 
     // Prints error messages once input command is neither "pick", "put" nor "end"
-    private static void invalidCommandIndicator(){
+    private static void invalidCommandPrinter(){
         System.out.println("ERROR: Invalid command. Valid commands are pick, put, or end.");
         System.out.println("Exiting Program.");
         System.exit(0);
