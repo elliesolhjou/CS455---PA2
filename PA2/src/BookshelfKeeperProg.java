@@ -59,7 +59,7 @@ public class BookshelfKeeperProg {
         }
     }
 
-    // Prints the current status of the bookshelf. Used a separate function for printing, since method name helps with understanding of code
+    // Prints the current status of the bookshelf.
     private static void printCurrentBookshelf(BookshelfKeeper keeper) {
         System.out.println(keeper.toString());
     }

@@ -7,22 +7,26 @@ import java.util.ArrayList;
 
 /**
  * Class BookshelfKeeper
- * Enables users to perform efficient putPos or pickHeight operations on a bookshelf of books
- * kept in non-decreasing order by height. Single books can only be added or removed from one
- * of the two ends of the bookshelf. Pick or put operations are performed using the minimum
- * number of such calls.
+ *
+ * Enables users to perform efficient putPos or pickHeight operation on a bookshelf of books kept in
+ * non-decreasing order by height, with the restriction that single books can only be added
+ * or removed from one of the two *ends* of the bookshelf to complete a higher level pick or put
+ * operation.  Pick or put operations are performed with minimum number of such adds or removes.
  */
 public class BookshelfKeeper {
 
    /**
-    * Representation invariants:
-    * 1. The contained bookshelf (Bookshelf bookshelf) is always in non-decreasing order.
-    * 2. Every book height is positive.
+    * Representation Invariants (RI):
+    * 1. The bookshelf is always in non-decreasing order by book height.
+    * 2. Every book height is positive (height > 0).
+    * 3. totalMoves is always >= 0.
+    * 4. callToMutator is always >= 0.
     */
 
    private Bookshelf bookshelf;
    private int totalMoves;
    private int callToMutator;
+
 
    /**
     * Creates a BookShelfKeeper object with an empty bookshelf
@@ -37,6 +41,7 @@ public class BookshelfKeeper {
    /**
     * Creates a BookshelfKeeper object initialized with the given sorted bookshelf.
     * Note: method does not make a defensive copy of the bookshelf.
+    *
     * PRE: sortedBookshelf.isSorted() is true.
     */
    public BookshelfKeeper(Bookshelf sortedBookshelf) {
@@ -48,10 +53,12 @@ public class BookshelfKeeper {
    }
 
    /**
-    * Removes a book from the specified position in the bookshelf and keeps the bookshelf sorted.
+    * Removes a book from the specified position in the bookshelf and keeps bookshelf sorted
+    * after picking up the book.
+    *
     * Returns the number of calls to mutators on the contained bookshelf used to complete this
     * operation. This must be the minimum number to complete the operation.
-    * @param position indicates which book at index "position" is requested to be removed
+    *
     * PRE: 0 <= position < getNumBooks()
     */
    public int pickPos(int position) {
@@ -95,12 +102,13 @@ public class BookshelfKeeper {
       return callToMutator;
    }
 
+
    /**
-    * Inserts a book with the specified height into the shelf.
-    * Keeps the contained bookshelf sorted after the insertion.
+    * Inserts book with specified height into the shelf.  Keeps the contained bookshelf sorted
+    * after the insertion.
     * Returns the number of calls to mutators on the contained bookshelf used to complete this
     * operation. This must be the minimum number to complete the operation.
-    * @param height shows new book's height we want to add to shelf
+    *
     * PRE: height > 0
     */
    public int putHeight(int height) {
@@ -153,7 +161,8 @@ public class BookshelfKeeper {
 
    /**
     * Returns the total number of calls made to mutators on the contained bookshelf
-    * so far, i.e., all the ones done to perform all of the pickPos and putHeight operations.
+    * so far, i.e., all the ones done to perform all of the pick and put operations
+    * that have been requested up to now.
     */
    public int getTotalOperations() {
       assert isValidBookshelfKeeper() : "Bookshelf is not valid";
@@ -169,12 +178,14 @@ public class BookshelfKeeper {
    }
 
 
-    /**
+   /**
     * Returns string representation of this BookshelfKeeper. Returns a String containing height
     * of all books present in the bookshelf in the order they are on the bookshelf, followed
     * by the number of bookshelf mutator calls made to perform the last pick or put operation,
     * followed by the total number of such calls made since we created this BookshelfKeeper.
+    *
     * Example return string showing required format: “[1, 3, 5, 7, 33] 4 10”
+    *
     */
    public String toString() {
       assert isValidBookshelfKeeper() : "Bookshelf is not valid";
